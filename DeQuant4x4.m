@@ -1,0 +1,9 @@
+function dct_block = DeQuant4x4(quant_block,qScale)
+L = [16,20,16,20;20,25,20,25;16,20,16,20;20,25,20,25];
+c = [17,18,24,47;18,21,26,66;24,13,56,99;47,66,99,99];
+dct_block = zeros(4,4,3);
+L = qScale.*L;
+c = qScale.*c;
+dct_block(:,:,1) = quant_block(:,:,1).*L;
+dct_block(:,:,2) = quant_block(:,:,2).*c;
+dct_block(:,:,3) = quant_block(:,:,3).*c;

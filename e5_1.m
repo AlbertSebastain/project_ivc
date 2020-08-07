@@ -14,7 +14,7 @@ len_mv = [len/8*col/8];
 EOB = 4000; 
 %scales = 1:0.6:1; % quantization scale factor, for E(4-1), we just evaluate scale factor of 1
 scales = [0.07, 0.2, 0.4, 0.8, 1.0, 1.5, 2, 3, 4, 4.5];
-scales = [0.07,0.2,0.4,0.8,1,1.5,2,3];
+scales = [0.07,0.2,0.4,0.8,1,1.5,2];
  %scales = 1;
 bitPerPixel = zeros(numel(scales),1);
 PSNR_mean = zeros(numel(scales),1);
@@ -71,7 +71,7 @@ for scaleIdx = 1 : numel(scales)
  
        %seq
        bytestream{seq} = enc_huffman_new(res_k-max_min+1,BinCode_res,CodeLengths_res); % huffman encode res.
-       bytestream_mv{seq-1} = enc_huffman_new(mv(:)-min_mv(seq-1)+1,BinCode_mv,CodeLengths_mv); %huffman encode the vectort
+       %bytestream_mv{seq-1} = enc_huffman_new(mv(:)-min_mv(seq-1)+1,BinCode_mv,CodeLengths_mv); %huffman encode the vectort
        [bytestream_ebc{seq-1},bitb,k(seq-1)] = exponential_golomb_code(mv(:)-min_mv(seq-1)+1);
        k_rec = dec_huffman_new(bytestream{seq},Binarytree_res,len_k(seq));
        k_rec = k_rec+max_min-1;
