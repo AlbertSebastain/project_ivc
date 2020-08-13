@@ -11,7 +11,8 @@ zigz =  [    1     2     6     7    15    16    28    29;
     21    23    34    39    47    52    56    61;
     22    35    38    48    51    57    60    62;
     36    37    49    50    58    59    63    64];
-for k = 1:3
+[~,d] = size(zz);
+for k = 1:d
     coeffs_t = zz(zigz(:),k);
     coeffs_t = reshape(coeffs_t,[8,8]);
     coeffs(:,:,k) = coeffs_t;

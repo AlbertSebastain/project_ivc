@@ -1,6 +1,6 @@
-function new_im = deblock(img,alpha,beta)
+function new_im = deblock(img,level)
     alpha = 10;
-    beta = 13;
+    beta =11;
     [len,col,dim] = size(img);
     dl = len/8;
     dc = col/8;
@@ -20,14 +20,14 @@ function new_im = deblock(img,alpha,beta)
                     p3 = block_up(5,ind);
                     q2 = block_down(3,ind);
                     q3 = block_down(3,ind);
-%                     if (abs(p0-q0) <= (alpha/4)+2 && abs(p1-q1) <= beta)
-%                         new_im(i*8,(j-1)*8+ind,d) = (p2+2*p1+2*p0+2*q0+q1+4)/8;
-%                         new_im(i*8-1,(j-1)*8+ind,d) = (p2+p1+p0+q0)/4;
-%                         new_im(i*8-2,(j-1)*8+ind,d) = (2*p3+3*p2+p1+p0+q0+4)/8;
-%                         new_im(i*8+1,(j-1)*8+ind,d) = (p1+2*p0+2*q0+2*q1+q2+4)/8;
-%                         new_im(i*8+2,(j-1)*8+ind,d) = (p0+q0+q1+p2+2)/4;
-%                         new_im(i*8+3,(j-1)*8+ind,d) = (2*q3+3*q2+q1+q0+p0+4)/8;
-                    if (abs(p0-q0) <= alpha && abs(p1-q1) <= beta)
+                    if (abs(p0-q0) <= (alpha/4)+2 && abs(p1-q1) <= beta && level == 2)
+                        new_im(i*8,(j-1)*8+ind,d) = (p2+2*p1+2*p0+2*q0+q1+4)/8;
+                        new_im(i*8-1,(j-1)*8+ind,d) = (p2+p1+p0+q0)/4;
+                        new_im(i*8-2,(j-1)*8+ind,d) = (2*p3+3*p2+p1+p0+q0+4)/8;
+                        new_im(i*8+1,(j-1)*8+ind,d) = (p1+2*p0+2*q0+2*q1+q2+4)/8;
+                        new_im(i*8+2,(j-1)*8+ind,d) = (p0+q0+q1+p2+2)/4;
+                        new_im(i*8+3,(j-1)*8+ind,d) = (2*q3+3*q2+q1+q0+p0+4)/8;
+                    elseif (abs(p0-q0) <= alpha && abs(p1-q1) <= beta)
                         
                         vector = [p1;p0;q0;q1];
                         filters = wi*vector;
@@ -55,14 +55,14 @@ function new_im = deblock(img,alpha,beta)
                     p3 = block_left(ind,5);
                     q2 = block_right(ind,3);
                     q3 = block_right(ind,4);
-%                     if (abs(p0-q0) <= (alpha/4)+2 && abs(p1-q1) <= beta)
-%                         new_im((i-1)*8+ind,j*8,d) = (p2+2*p1+2*p0+2*q0+q1+4)/8;
-%                         new_im((i-1)*8+ind,j*8-1,d) = (p2+p1+p0+q0+2)/4;
-%                         new_im((i-1)*8+ind,j*8-2,d) = (2*p3+3*p2+p1+p0+q0+4)/8;
-%                         new_im((i-1)*8+ind,j*8+1,d) = (p1+2*p0+2*q0+2*q1+q2+4)/8;
-%                         new_im((i-1)*8+ind,j*8+2,d) = (p0+q0+q1+q2+2)/4;
-%                         new_im((i-1)*8+ind,j*8+3,d) = (2*p3+3*p2+p1+p0+q0+4)/8;
-                    if (abs(p0-q0) <= alpha && abs(p1-q1) <= beta)
+                     if (abs(p0-q0) <= (alpha/4)+2 && abs(p1-q1) <= beta && level == 2)
+                         new_im((i-1)*8+ind,j*8,d) = (p2+2*p1+2*p0+2*q0+q1+4)/8;
+                         new_im((i-1)*8+ind,j*8-1,d) = (p2+p1+p0+q0+2)/4;
+                         new_im((i-1)*8+ind,j*8-2,d) = (2*p3+3*p2+p1+p0+q0+4)/8;
+                         new_im((i-1)*8+ind,j*8+1,d) = (p1+2*p0+2*q0+2*q1+q2+4)/8;
+                         new_im((i-1)*8+ind,j*8+2,d) = (p0+q0+q1+q2+2)/4;
+                         new_im((i-1)*8+ind,j*8+3,d) = (2*p3+3*p2+p1+p0+q0+4)/8;
+                     elseif (abs(p0-q0) <= alpha && abs(p1-q1) <= beta)
                         vector = [p2;p0;q0;q2];
                         filters = wi*vector;
                         %delta = ((q-p)*4+(p2-q2)+4)/8;
