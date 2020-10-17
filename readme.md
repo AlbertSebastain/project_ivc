@@ -1,6 +1,6 @@
 # Video compression projects
  The video filesare saved in as images and can be loaded by the programm.   
- The fold `final project` is the full implementation version. and the alogrithm has a difference with the previous one. e.g. the final project doesn't use APBT CALVC and doesn't   
+ The fold `final project` is the full implementation version. and the alogrithm has a difference with the previous one. e.g. the final project doesn't use APBT CALVC and doesn't
  apply 4x4 block algorithms  
  ## how to use
  **Run optimization.m** 
