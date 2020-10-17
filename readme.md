@@ -12,7 +12,7 @@ keep the foreman images in the fold and do not change inter_intra_parameters.mat
 The programm automatically load 'inter_intra_parameters.mat' the mat file saves the bitrate and PSNR of the baseline in the chapter 5 and chapter 4.  inter_still_image.m can calcuate the data.  
 **output arguments**:  
 **PSNR_mean**: save the PSNR of the optimization shape: (len(qScale),1)  
-**bitPerPixel**: save the bitrate of the optimization shape: (len(qScale),1)
+**bitPerPixel**: save the bitrate of the optimization shape: (len(qScale),1)  
 **figures**  
 **titlel 'D R plot with restricted 0-4 bits' plot of the optimization and baseline encoder 0-4 bits**
 **title' D R plot' plot of the optimization and baseline encoder len(qScale)**
