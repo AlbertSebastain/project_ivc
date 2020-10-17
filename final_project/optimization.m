@@ -1,4 +1,6 @@
 %lena_small = double(imread('lena_small.tif'));
+clear
+clc
 %% load image
 load('inter_intra_parameters.mat');
 for i = 20:40
@@ -9,15 +11,15 @@ for i = 20:40
     
 end
 %% initial parameters
+intra_mode = 1;
+EOB = 4000; 
+scales = [0.07, 0.2, 0.4, 0.8, 1.0, 1.5, 2, 3, 4, 4.5];
 [len,col,dem,fr] = size(image);
 len_mv = [len/8*col/8];
 %form       = double(imread('foreman0020.bmp'));
-EOB = 4000; 
-intra_mode = 1;
-%scales = 1:0.6:1; % quantization scale factor, for E(4-1), we just evaluate scale factor of 1
-%scales = [0.07, 0.2, 0.4, 0.8, 1.0, 1.5, 2, 3, 4, 4.5];
-scales = [0.07,0.2,0.4,0.8,1,1.5,2];
-%scales = 1;
+
+ % quantization scale factor, for E(4-1), we just evaluate scale factor of 1
+
 bitPerPixel = zeros(numel(scales),1);
 PSNR_mean = zeros(numel(scales),1);
 max_min = -1000;
@@ -34,9 +36,9 @@ for scaleIdx = 1 : numel(scales)
    %% encoding decoding first image
    fram_1 = image(:,:,:,1);
    if intra_mode == 1
-        img_dst = inter_predict(fram_1,EOB,qScale);
+        img_dst = intra_predict(fram_1,EOB,qScale);
    else
-        [img_dst,im_zigz1] = IntraEncode(fram_1,qScale,EOB);
+        [img_dst,im_zigz1] = IntraEncode(fram_1,qScale,EOB,intra_mode);
    end
    min_k(1) = min(img_dst);
    len_k(1) = length(img_dst);
@@ -46,9 +48,9 @@ for scaleIdx = 1 : numel(scales)
    k_rec_first = dec_huffman_new(bytestream{1},Binarytree_first,len_k(1));
    k_rec_first = k_rec_first+min_k(1)-1;
    if intra_mode == 1
-        im_rec(:,:,:,1) = inter_recon(k_rec_first,size(fram_1,[1,2,3]),qScale,EOB);
+        im_rec(:,:,:,1) = intra_recon(k_rec_first,size(fram_1,[1,2,3]),qScale,EOB);
    else
-        im_rec(:,:,:,1) = IntraDecode(k_rec_first,size(fram_1),qScale,EOB);
+        im_rec(:,:,:,1) = IntraDecode(k_rec_first,size(fram_1),qScale,EOB,intra_mode);
    end
    im_rec(:,:,:,1) = deblock(im_rec(:,:,:,1),1);
    im_rec_rgb(:,:,:,1) = ictYCbCr2RGB(im_rec(:,:,:,1));
@@ -66,7 +68,7 @@ for scaleIdx = 1 : numel(scales)
        ref_fram_1dim = ref_fram(:,:,1);
        mv = SSD(ref_fram_1dim,fram_1dim);
        res = fram-SSD_rec(ref_fram,mv); %the first res
-       [res_k,im_zigz]    = IntraEncode(res, qScale,EOB);
+       [res_k,im_zigz]    = IntraEncode(res, qScale,EOB,intra_mode);
        min_k(seq) = min(res_k);
        len_k(seq) = length(res_k);
         
@@ -86,7 +88,7 @@ for scaleIdx = 1 : numel(scales)
        [bytestream_ebc{seq-1},bitb,k(seq-1)] = exponential_golomb_code(mv(:)-min_mv(seq-1)+1);
        k_rec = dec_huffman_new(bytestream{seq},Binarytree_res,len_k(seq));
        k_rec = k_rec+max_min-1;
-       res_rec = IntraDecode(k_rec, size(fram_1),qScale,EOB);
+       res_rec = IntraDecode(k_rec, size(fram_1),qScale,EOB,intra_mode);
        %mv_rec = dec_huffman_new(bytestream_mv{seq-1},Binarytree_mv,len_mv);
        mv_rec = exponential_golomb_decode(bytestream_ebc{seq-1},k(seq-1));
        mv_rec = mv_rec+min_mv(seq-1)-1;
@@ -129,7 +131,7 @@ hold off
 figure
 plot(bitPerPixel,PSNR_mean,'x-');
 hold on
-plot(bitrate_inter,PSNRP_inter,'x-r');
+plot(bitrate_inter,PSNR_inter,'x-r');
 plot(bitrate_image,PSNR_image,'x-g');
 legend('optimization','baseline inter','baseline intra');
 xlabel('bitrate');
