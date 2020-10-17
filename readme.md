@@ -13,7 +13,7 @@ The programm automatically load 'inter_intra_parameters.mat' the mat file saves 
 **output arguments**:  
 **PSNR_mean**: save the PSNR of the optimization shape: (len(qScale),1)  
 **bitPerPixel**: save the bitrate of the optimization shape: (len(qScale),1)
-plot
+**figures**  
 **titlel 'D R plot with restricted 0-4 bits' plot of the optimization and baseline encoder 0-4 bits**
 **title' D R plot' plot of the optimization and baseline encoder len(qScale)**
  
